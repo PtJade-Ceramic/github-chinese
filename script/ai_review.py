@@ -87,8 +87,10 @@ PR 描述：
 若 diff 为空或无可审内容，请如实说明。"""
 
     # 4) 调用 DeepSeek
+    base_url = os.environ.get("LLM_BASE_URL") or "https://api.deepseek.com"
+    model = os.environ.get("LLM_MODEL") or "deepseek-chat"
     payload = {
-        "model": os.environ.get("LLM_MODEL", "deepseek-chat"),
+        "model": model,
         "messages": [
             {"role": "system", "content": system},
             {"role": "user", "content": user},
@@ -97,7 +99,7 @@ PR 描述：
         "stream": False,
     }
     req = urllib.request.Request(
-        f"{os.environ.get('LLM_BASE_URL', 'https://api.deepseek.com')}/chat/completions",
+        f"{base_url}/chat/completions",
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"},
     )
