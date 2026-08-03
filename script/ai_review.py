@@ -13,16 +13,29 @@ import argparse
 import json
 import os
 import sys
+import time
 import urllib.request
 import urllib.error
 
 
-def fetch(url: str, headers: dict | None = None) -> str:
+def fetch(url: str, headers: dict | None = None, retries: int = 3) -> str:
+    """拉取 URL；对 5xx / 网络错误做指数退避重试。"""
     req = urllib.request.Request(
         url, headers=headers or {"User-Agent": "github-chinese-ai-review"}
     )
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read().decode("utf-8")
+    last_err = ""
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return r.read().decode("utf-8")
+        except urllib.error.HTTPError as e:
+            last_err = f"HTTP {e.code}"
+            if e.code < 500:  # 4xx 不重试
+                raise
+        except Exception as e:  # noqa: BLE001 - 网络层异常统一重试
+            last_err = str(e)
+        time.sleep(2 * (attempt + 1))
+    raise RuntimeError(f"请求失败（重试 {retries} 次后仍失败）：{last_err}")
 
 
 def main() -> None:
@@ -39,11 +52,19 @@ def main() -> None:
         sys.exit(1)
 
     # 1) PR 元数据 + diff
-    pr_meta = json.loads(fetch(f"https://api.github.com/repos/{args.repo}/pulls/{args.pr}"))
+    try:
+        pr_meta = json.loads(fetch(f"https://api.github.com/repos/{args.repo}/pulls/{args.pr}"))
+    except Exception as e:  # noqa: BLE001
+        print(f"❌ 无法获取 PR 信息：{e}", file=sys.stderr)
+        sys.exit(1)
     title = pr_meta.get("title", "")
     body = (pr_meta.get("body") or "")[:2000]
     base, head = pr_meta["base"]["ref"], pr_meta["head"]["ref"]
-    diff = fetch(f"https://github.com/{args.repo}/pull/{args.pr}.diff")
+    try:
+        diff = fetch(f"https://github.com/{args.repo}/pull/{args.pr}.diff")
+    except Exception as e:  # noqa: BLE001
+        print(f"❌ 无法获取 PR diff：{e}", file=sys.stderr)
+        sys.exit(1)
     if len(diff) > 60000:
         diff = diff[:60000] + "\n...(diff 过长已截断)"
 
@@ -110,7 +131,11 @@ PR 描述：
         print(f"❌ DeepSeek 调用失败：{e.code} {e.read().decode('utf-8')[:500]}", file=sys.stderr)
         sys.exit(1)
 
-    content = resp["choices"][0]["message"]["content"]
+    choices = resp.get("choices") or []
+    if not choices:
+        print("❌ DeepSeek 返回空 choices（可能被内容过滤或额度/余额不足）", file=sys.stderr)
+        sys.exit(1)
+    content = choices[0].get("message", {}).get("content", "")
     review = (
         f"## 🤖 AI 审查（DeepSeek）— PR #{args.pr}\n\n{content}\n\n"
         "---\n*由 `script/ai_review.py` 生成，使用请求者自己的 DeepSeek 额度。*"
