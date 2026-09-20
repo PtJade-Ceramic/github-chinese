@@ -13,8 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: github-pages
     steps:
+      # 未配置 APP_CLIENT_ID 时回退到内置 GITHUB_TOKEN（github-actions[bot]）；
+      # 若要改以 GitHub App 身份提交，需设置仓库变量 APP_CLIENT_ID 并给该 App 授予 Contents 写权限。
       - name: Generate a token
         id: generate_token
+        if: vars.APP_CLIENT_ID != ''
         uses: actions/create-github-app-token@v3
         with:
           client-id: ${{ vars.APP_CLIENT_ID }}
@@ -58,7 +61,7 @@ jobs:
         if: ${{ env.LOCALS_JS_CHANGED == 'true' &&
                 env.MAIN_USER_JS_CHANGED == 'true' }}
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token || github.token }}
           APP_SLUG: ${{ steps.generate_token.outputs.app-slug }}
         run: |
           version=$(sed -n -E 's/^\/\/ @version\s+(.+)/\1/p' "main(greasyfork).user.js")
