@@ -14,8 +14,6 @@ on:
     types: [opened, synchronize, ready_for_review]
   issue_comment:
     types: [created]
-  schedule:
-    - cron: '*/15 * * * *'
 
 permissions:
   contents: read
@@ -34,12 +32,9 @@ jobs:
       LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
       GH_TOKEN: ${{ github.token }}
       APP_ID: ${{ secrets.APP_ID }}
-      TARGET_REPO: ${{ vars.REVIEW_TARGET || 'maboloshi/github-chinese' }}
-      WATCHLIST: ${{ vars.REVIEW_WATCHLIST || '' }}
     if: >-
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'pull_request' ||
-      (github.event_name == 'schedule' && vars.REVIEW_WATCHLIST != '') ||
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
        contains(github.event.comment.body, '/review') &&
@@ -78,22 +73,9 @@ jobs:
           elif [ "${{ github.event_name }}" = "pull_request" ]; then
             repo="${{ github.repository }}"
             pr="${{ github.event.pull_request.number }}"
-          elif [ "${{ github.event_name }}" = "schedule" ]; then
-            repo="${TARGET_REPO:-maboloshi/github-chinese}"
-            owner="${{ github.repository_owner }}"
-            IFS=',' read -ra WATCH <<< "$WATCHLIST"
-            for p in "${WATCH[@]}"; do
-              [ -z "$p" ] && continue
-              hit=$(gh api "repos/$repo/issues/$p/comments" \
-                --jq "[.[] | select(.user.login == \"$owner\") | select(.body | contains(\"/review\"))] | length" 2>/dev/null || echo 0)
-              if [ "$hit" != "0" ]; then
-                pr="$p"
-                break
-              fi
-            done
           fi
           if [ -z "$repo" ] || [ -z "$pr" ]; then
-            echo "本次无目标 PR（schedule 看护清单中无待审 /review），跳过。"
+            echo "本次无目标 PR，跳过。"
             exit 0
           fi
           case "$repo" in

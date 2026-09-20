@@ -22,9 +22,8 @@ flowchart LR
 | 触发 | 说明 |
 |---|---|
 | `pull_request`（opened / synchronize / ready_for_review） | 打开或更新 PR 时自动审查（需工作流位于默认分支） |
-| 评论 `/review` | 在 PR 上评论 `/review` 即按需审查 |
-| `workflow_dispatch` | 手动指定 `repo` 与 `pr` 审查任意公开 PR |
-| `schedule`（每 15 分钟） | 轮询「看护清单」中的上游 PR，响应其中由本仓库属主发出的 `/review` |
+| 评论 `/review` | 在**本仓库的** PR 上评论 `/review` 即按需审查 |
+| `workflow_dispatch` | 手动指定 `repo` 与 `pr` 审查任意公开 PR（含上游） |
 
 去重：同一 head SHA 只会审查一次（评论尾部 `<!--ai-review:<sha>-->` 标记）。
 
@@ -38,13 +37,6 @@ flowchart LR
 | `APP_ID` | 可选 | 用于以 App 机器人身份发布（见下「GitHub App」） |
 | `APP_PRIVATE_KEY` | 可选 | GitHub App 私钥（`.pem` 全文） |
 | `LLM_BASE_URL` / `LLM_MODEL` | 可选 | 默认 `https://api.deepseek.com` / `deepseek-chat` |
-
-### Variables（可选，Step 2 轮询用）
-
-| 名称 | 说明 |
-|---|---|
-| `REVIEW_TARGET` | 轮询的目标仓库，默认 `maboloshi/github-chinese` |
-| `REVIEW_WATCHLIST` | 逗号分隔的 PR 号，如 `760,766`；只轮询这些 PR 上的 `/review` |
 
 ### GitHub App（可选，bot 身份发布）
 
@@ -61,13 +53,13 @@ flowchart LR
 - **提示词注入**：密钥绝不进入 prompt；模型输出只作为文本渲染，不执行。
 - **工作流安全**：不使用 `pull_request_target`；第三方 Action 建议钉版本；不打印密钥。
 - **已知限制**：
-  - 上游 `/review` 为**轮询**：fork 实例每 15 分钟扫描一次 `REVIEW_WATCHLIST`，从评论 `/review` 到 bot 回复最长约 15 分钟，非即时。
-  - fork PR 的 `pull_request` 事件**读不到 secrets** → fork 内 PR 自动审需要把工作流放到 fork 默认分支；上游 PR 的自动审依赖 fork 侧 `push` 反查或轮询。
+  - 审查**上游 PR** 只能通过 `workflow_dispatch` 手动指定 `repo`/`pr`；`/review` 评论与自动审查仅对本仓库（fork）的 PR 生效。
+  - fork 内来自其他 fork 的 PR，`pull_request` 事件**读不到 secrets** → 这类 PR 无法自动审。
   - 发布到上游需仓库维护者安装 GitHub App（可随时撤销）。
 
 ## 常见问题
 
 - **工作流没跑？** 确认工作流文件在**默认分支**（`issue_comment` / `schedule` / `workflow_dispatch` 只在默认分支触发）。
 - **提示缺 `LLM_API_KEY`？** 在 fork 的 Secrets 添加。
-- **`/review` 没反应？** 轮询有延迟（≤15 分钟）；确认该 PR 在 `REVIEW_WATCHLIST` 中（若配置）。
+- **`/review` 没反应？** 评论触发只对**本仓库的 PR** 有效，且工作流须在默认分支；审查上游 PR 请用 `workflow_dispatch`（填 `repo` 与 `pr`）。
 - **想只审一次？** 去重按 head SHA，同一提交不会重复审查。
