@@ -54,6 +54,9 @@ def main(argv: list[str]) -> int:
     for stream in (sys.stdout, sys.stderr):
         stream.reconfigure(encoding="utf-8", errors="replace")
 
+    # 只比较字形：opencc-python-reimplemented 的 s2tw 不含台湾词汇表；
+    # 带词汇表的 s2twp 会把「插件」改成「外掛」、「腳本」改成「指令碼」，
+    # 那是词汇差异而非字形混用，会造成误报（见 test_taiwan_vocabulary_is_not_reported）。
     converter: dict[str, Callable[[str], str]] = {
         "CN": opencc.OpenCC("t2s").convert,
         "TW": opencc.OpenCC("s2tw").convert,
@@ -62,7 +65,26 @@ def main(argv: list[str]) -> int:
     if argv:
         names = [Path(arg).name for arg in argv]
     else:
+        # GitHub 只识别 .yml；.yaml 会被静默忽略，故显式报错而非跳过
+        yaml_named = sorted(p.name for p in TEMPLATE_DIR.glob("*.yaml"))
+        if yaml_named:
+            print(
+                f"❌ 模板目录下存在 .yaml 文件：{'、'.join(yaml_named)}",
+                file=sys.stderr,
+            )
+            print("   GitHub 只识别 .yml，请将这些文件改名为 .yml。", file=sys.stderr)
+            return 1
         found = sorted(p.name for p in TEMPLATE_DIR.glob("*.yml"))
+        # 议题表单必须是 .yml（config.yml 亦然），.yaml 会被 GitHub 忽略
+        odd = sorted(
+            p.name for p in TEMPLATE_DIR.glob("*.y*ml") if p.suffix != ".yml"
+        )
+        if odd:
+            print(
+                f"❌ 议题表单必须是 .yml（.yaml 不会被 GitHub 读取）：{'、'.join(odd)}",
+                file=sys.stderr,
+            )
+            return 1
         unregistered = [
             name
             for name in found
