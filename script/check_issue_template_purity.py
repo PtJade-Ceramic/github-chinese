@@ -51,7 +51,8 @@ def _walk_strings(node: Any, path: str = "") -> Iterator[tuple[str, str]]:
 
 def main(argv: list[str]) -> int:
     # Windows 管道重定向时强制 UTF-8，避免中文输出触发 UnicodeEncodeError
-    sys.stdout.reconfigure(encoding="utf-8")
+    for stream in (sys.stdout, sys.stderr):
+        stream.reconfigure(encoding="utf-8", errors="replace")
 
     converter: dict[str, Callable[[str], str]] = {
         "CN": opencc.OpenCC("t2s").convert,
@@ -71,6 +72,14 @@ def main(argv: list[str]) -> int:
             print(f"❌ 发现未登记的模板：{'、'.join(unregistered)}", file=sys.stderr)
             print(
                 "   请在本脚本的 TEMPLATES 中登记其语种（config.yml 无需登记）。",
+                file=sys.stderr,
+            )
+            return 1
+        missing = [name for name in TEMPLATES if name not in found]
+        if missing:
+            print(f"❌ 已登记的模板不存在：{'、'.join(missing)}", file=sys.stderr)
+            print(
+                "   请确认模板文件路径，或从本脚本的 TEMPLATES 中移除对应条目。",
                 file=sys.stderr,
             )
             return 1
