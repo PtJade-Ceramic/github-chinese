@@ -88,9 +88,27 @@ class PurityCheckTest(unittest.TestCase):
         self.assertIn(CN_NAME, _output(result))
 
     def test_code_block_and_code_span_are_ignored(self) -> None:
-        value = "示例：\n\n```\n步驟與歡迎\n```\n\n还有 `繁體` 这个词\n\n欢迎"
-        result = self.run_check({CN_NAME: _cn(value), TW_NAME: _tw()})
+        result = self.run_check({
+            CN_NAME: _cn("示例：\n\n```\n步驟與歡迎\n```\n\n还有 `繁體` 这个词\n\n欢迎"),
+            TW_NAME: _tw(),
+        })
         self.assertEqual(0, result.returncode, _output(result))
+
+    def test_taiwan_vocabulary_is_not_reported(self) -> None:
+        """合法的台湾用语（插件/腳本/設定…）属于词汇差异，不算字形混用。"""
+        value = "本插件支援繁體，請在腳本管理員中設定"
+        result = self.run_check({CN_NAME: _cn(), TW_NAME: _tw(value)})
+        self.assertEqual(0, result.returncode, _output(result))
+
+    def test_yaml_extension_is_rejected(self) -> None:
+        """模板目录下只认 .yml；.yaml 会被 GitHub 忽略，应报错而非静默跳过。"""
+        result = self.run_check({
+            CN_NAME: _cn(),
+            TW_NAME: _tw(),
+            "bug-提交-简体中文-.yaml": _cn(),
+        })
+        self.assertEqual(1, result.returncode, _output(result))
+        self.assertIn(".yaml", _output(result))
 
     def test_unregistered_template_is_rejected(self) -> None:
         result = self.run_check({
