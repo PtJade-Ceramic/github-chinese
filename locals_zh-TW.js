@@ -65,6 +65,11 @@ I18N.conf = {
             '.js-full-logs-container', // 工作流執行日誌
             'span.PRIVATE_TreeView-item-content-text', // 文件樹資料夾/檔名
             'span.ActionList-item-label', // PR 文件樹資料夾/檔名
+            'div.commit-title', // 提交標題（經典 UI）
+            'div.commit-desc', // 提交說明（經典 UI）
+            'span.ws-pre-wrap', // 提交說明
+            "h4[class^='Title-module__heading']", // 提交標題
+            'div[class^="CommitHeader-module__commitMessageContainer"]', // PR changes 頁提交消息容器
         ],
         'repository/compare': [
             "tbody", // 程式碼差異
@@ -85,6 +90,7 @@ I18N.conf = {
             "article.markdown-body",
         ],
         'repository/tree': [
+            'article.markdown-body', // Markdown 正文
             'nav[data-testid="breadcrumbs"]', // 麵包屑導航
             'div[data-testid="breadcrumbs-filename"]', // 麵包屑導航 檔名部分
             'tr.react-directory-row', // 文件列表中資料夾和文件條目
@@ -111,6 +117,14 @@ I18N.conf = {
             'header.GlobalNav', // React 版全局導航
             'header.GlobalNav [class*="Search-module__"]', // React 版頂部搜尋按鈕
             'qbsearch-input', // 頂部搜尋框自定義元素
+            '.highlight',
+            '.notranslate',
+            '[translate="no"]',
+            'input',
+            'textarea',
+            '[contenteditable=""]',
+            '[contenteditable="true"]',
+            '[contenteditable="plaintext-only"]',
             'div.QueryBuilder-StyledInputContainer', // 頂部搜尋欄 關鍵詞
             '#qb-input-query span', // 搜尋頁面 搜尋欄 關鍵詞
 			'div.styled-input-content', // 篩選條
@@ -180,6 +194,11 @@ I18N.conf = {
             '.js-full-logs-container', // 工作流執行日誌
             'span.PRIVATE_TreeView-item-content-text', // 文件樹資料夾/檔名
             'span.ActionList-item-label', // PR 文件樹資料夾/檔名
+            'div.commit-title', // 提交標題（經典 UI）
+            'div.commit-desc', // 提交說明（經典 UI）
+            'span.ws-pre-wrap', // 提交說明
+            "h4[class^='Title-module__heading']", // 提交標題
+            'div[class^="CommitHeader-module__commitMessageContainer"]', // PR changes 頁提交消息容器
         ],
         'repository/compare': [
             'td.blob-code', // 程式碼差異 分屏/同屏
@@ -247,6 +266,14 @@ I18N.conf = {
             '.markdown-title',
             'span.ActionListItem-descriptionWrap',  // 頂部搜尋欄 關鍵詞
             'CODE', 'SCRIPT', 'STYLE', 'LINK', 'IMG', 'MARKED-TEXT', 'PRE', 'KBD', 'SVG', 'MARK', // 特定元素標籤
+            '.highlight',
+            '.notranslate',
+            '[translate="no"]',
+            'input',
+            'textarea',
+            '[contenteditable=""]',
+            '[contenteditable="true"]',
+            '[contenteditable="plaintext-only"]',
 			'div.styled-input-content', // 篩選條
         ],
     },
@@ -668,6 +695,8 @@ I18N["zh-TW"]["public"] = { // 公共區域翻譯
                 "AI CODE CREATION": "AI 程式碼生成",
                     // Copilot
                         "Write better code with AI": "藉助 AI 寫出更好的程式碼",
+                    "GitHub Copilot app": "GitHub Copilot 應用",
+                        "Direct agents from issue to merge": "讓AI 代理從議題直達合併",
                     // Spark
                         "Build and deploy intelligent apps": "構建和部署智能應用",
                     "GitHub Models": "GitHub 模型",
@@ -683,6 +712,8 @@ I18N["zh-TW"]["public"] = { // 公共區域翻譯
                         "Plan and track work": "計劃和追蹤工作",
                     "Code Review": "程式碼審查",
                         "Manage code changes": "管理程式碼更改",
+                    "Code Quality": "程式碼質量",
+                        "Enforce quality at merge": "在合併時強制檢查質量",
                 "APPLICATION SECURITY": "應用安全",
                     "GitHub Advanced Security": "GitHub 高級安全",
                         "Find and fix vulnerabilities": "查找並修復漏洞",
@@ -1264,6 +1295,8 @@ I18N["zh-TW"]["public"] = { // 公共區域翻譯
 
             "Top result": "最佳結果",
             "No results matched your search": "沒有與您的搜尋相符的結果",
+            "Try a different search query.": "請嘗試其他搜尋查詢。",
+            "Learn more about searching and filtering issues and pull requests.": "瞭解有關搜尋和篩選議題及合併請求的更多訊息。",
             // [/in ([\w]+/[\w]+)/, "在 $1"],
 
             // # 模式
@@ -1671,6 +1704,11 @@ I18N["zh-TW"]["public"] = { // 公共區域翻譯
             "Privacy Policy": "隱私政策",
             "Cancel": "取消",
             "Send": "發送",
+
+            "View token usage": "查看詞元消耗",
+                "Included credits": "包含額度",
+                    "Learn more about Included credits": "瞭解有關包含額度的更多訊息",
+                "Refresh for latest usage": "刷新以獲取最新用量",
             // 響應狀態
                 "Copilot is responding…": "Copilot 響應中…",
                 "creating plan": "創建計劃中",
@@ -1815,6 +1853,9 @@ I18N["zh-TW"]["public"] = { // 公共區域翻譯
         // AI 代理
         [/Branch: (.+)/, "分支：$1"],
         [/Agent: (.+)/, "AI 代理：$1"],
+        [/Resets on /, "重置於 "],
+        [/^AI credits$/, "AI 額度"],
+
         /**
          * 匹配時間格式
          *
@@ -1960,7 +2001,7 @@ I18N["zh-TW"]["public"] = { // 公共區域翻譯
         }],
 
         // 其他翻譯
-        [/to enable two-factor authentication as an additional security measure. Your activity on GitHub includes you in this requirement. You will need to enable two-factor authentication on your account before ([^ ]+), or be restricted from account actions./, "啟用雙因素身份驗證（2FA）作為額外安全措施。您在 GitHub 上的活動讓您接收到此要求。您將需要在 $1 前啟用雙因素身份驗證，否則會被限制帳戶操作。"],
+        [/to enable two-factor authentication as an additional security measure. Your activity on GitHub includes you in this requirement. You will need to enable two-factor authentication on your account before ?(.+?), or be restricted from account actions./, "啟用雙因素身份驗證（2FA）作為額外安全措施。您在 GitHub 上的活動讓您接收到此要求。您將需要在 $1 前啟用雙因素身份驗證，否則會被限制帳戶操作。"],
     ],
     "time-regexp": [ // 時間正則翻譯專項
         /**
@@ -2144,10 +2185,18 @@ I18N["zh-TW"]["page-dashboard"] = { // 已登入的首頁 - 儀表板（含組�
         // 合併請求
             "My open pull requests":"我打開的",
             "Summarize my latest PR":"總結最近",
+            "No pull requests found, try a different filter.": "未找到合併請求，請嘗試其他篩選條件。",
 
-        "Fast and cost-efficient": "快速、經濟高效",
-        "Versatile and highly intelligent": "多功能、高智能",
-        "Most powerful at complex tasks": "在複雜任務中最強大",
+            "No issues found, try a different filter.": "未找到議題，請嘗試其他篩選條件。",
+        
+        "Auto": "自動",
+        "Optimized for:": "優化方向：",
+        "Prioritizes speed and efficiency": "優先考慮速度和效率",
+        "Efficiency": "效率",
+        "Balances speed and intelligence": "兼顧速度和智能",
+        "Balance": "均衡",
+        "Prioritizes intelligence": "優先考慮智能",
+        "Intelligence": "智能",
         "Agent sessions": "AI 代理任務",
         "No sessions found. Try a different filter, or": "沒有找到會話。嘗試不同的過濾器，或",
         "start a session": "開始任務",
@@ -2174,11 +2223,6 @@ I18N["zh-TW"]["page-dashboard"] = { // 已登入的首頁 - 儀表板（含組�
             // 選項
                 "Task": "任務",
                 "Create issue": "創建議題",
-
-            "Models": "模型",
-                    "Fast and cost-efficient": "快速、經濟高效",
-                    "Versatile and highly intelligent": "多功能、高智能",
-                    "Most powerful at complex tasks": "執行複雜任務",
 
         "Try the new experience": "嘗試新版",
         "Try the new dashboard experience": "試用新儀表板",
@@ -2580,7 +2624,7 @@ I18N["zh-TW"]["page-profile-public"] = { // 個人首頁（含組織）
             "security advisory credits": "個安全諮詢分",
             "security advisory credit": "個安全諮詢分",
             "Organizations": "組織",
-            "Block or Report": "拉黑或舉報",
+            "Block or Report user": "拉黑或舉報",
             "Unblock or report user": "取消拉黑或舉報",
             "- same time": "- 時間相同",
 
@@ -6379,11 +6423,13 @@ I18N["zh-TW"]["settings/copilot"] = { // 設置 - GitHub Copilot
                 "Chat in GitHub Mobile": "在 GitHub Mobile 中使用",
                 "More features": "更多功能",
 
-            "Premium requests": "高級請求",
-                "Please note that there may be a delay in the displayed usage percentage. The premium request entitlement for your plan will reset at the start of next month. You can enable additional premium requests in the": "請注意，顯示的使用百分比可能會有延遲。您計劃的高級請求權限將在下個月初重置。您可以在以下位置啟用額外的高級請求：",
-                "Billing settings": "帳單設置",
-                "Please note that there may be a delay in the displayed usage percentage. The premium request entitlement for your plan will reset at the start of next month. To enable additional premium requests,": "請注意，顯示的使用百分比可能會有延遲。您計劃的高級請求權限將在下個月初重置。要啟用額外的高級請求，請",
-                "update your Copilot premium request budget": "更新您的 Copilot 高級請求預算",
+            // 使用情況
+            "Included usage": "套內用量",
+                "AI credits included with your plan, reset monthly. Enable additional usage to continue with pay-as-you-go credits once you run out of your included usage.": "AI 額度包含在您的計劃中，每月重置。一旦用套內用量，可以啟用超套用量以繼續使用按需付費的額度。",
+                "No usage yet": "尚未使用",
+            "Additional usage": "超套用量",
+                "Not enabled": "未啟用",
+
             "Plan upgrades are temporarily unavailable.": "計劃升級暫時不可用。",
             "Free responses reset": "免費響應額度將在",
             "Read more.": "瞭解更多。",
@@ -6496,6 +6542,9 @@ I18N["zh-TW"]["settings/copilot"] = { // 設置 - GitHub Copilot
         [/Free responses reset (\d+) 天之內\. Plan upgrades are temporarily unavailable\. Read more。?/, "免費響應額度將在 $1 天后重置。計劃升級暫時不可用。瞭解更多。"],
         [/Free responses reset in (\d+) days?\. Plan upgrades are temporarily unavailable\./, "免費響應額度將在 $1 天后重置。計劃升級暫時不可用。"],
         [/Free responses reset in (\d+) days?\. Plan upgrades are temporarily unavailable\. Read more\.?/, "免費響應額度將在 $1 天后重置。計劃升級暫時不可用。瞭解更多。"],
+        // 使用情況
+        [/((\d+) \/ (\d+)) AI credits/, "$1 AI 額度"],
+        [/((\$\d+(\.\d+)?) \/ (\$\d+(\.\d+)?)) budget/, "$1 預算"],
     ],
     "title": {
         "static": {
@@ -8811,6 +8860,9 @@ I18N["zh-TW"]["page-new-repo"] = {// 儲存庫 - 新建/導入/復刻儲存庫
             "is ready.": "已準備就緒。",
 
         // 復刻儲存庫 /<user-name>/<repo-name>/fork
+            // 錯誤訊息
+                "You can't fork this repository at this time.": "您此時不能復刻此儲存庫。",
+
             "Create a new fork": "創建新復刻",
                 "A": " ",
                 "fork": "復刻",
@@ -9024,12 +9076,19 @@ I18N["zh-TW"]["repository"] = { // 儲存庫頁面 /<user-name>/<repo-name>/
                 "You don't have any forks of this repository.": "您沒有此儲存庫的任何復刻。",
                 "Create a new fork": "創建復刻",
 
+                // 復刻浮窗（右側箭頭）
+                "See your forks of this repository": "查看您的復刻",
+
                 // 復刻被鎖
                 "Cannot fork because repository is locked.": "無法復刻，因為儲存庫被鎖定。",
 
-                //
+                // 標星
                 "Star this repository": "標星儲存庫", //小屏模式
                 "Unstar this repository": "取消儲存庫星號", //小屏模式
+
+                "Add this repository to one or more lists": "新增此儲存庫到 1 或多個列表",
+
+                "Star lists": "標星列表",
 
             // 儲存庫主頁 分支保護
                 // [/Your ([^ ]+) branch isn't protected/, "您的 $1 分支不受保護"], // 儲存庫主頁 分支保護
@@ -9121,7 +9180,9 @@ I18N["zh-TW"]["repository"] = { // 儲存庫頁面 /<user-name>/<repo-name>/
                         // GitHub CLI
                         "Work fast with our official CLI.": "使用我們的官方 CLI 快速工作。",
                         "Learn more about the CLI": "瞭解更多關於 CLI 的訊息",
-
+                    
+                    "Open in GitHub Copilot app": "在 GitHub Copilot 應用中打開",
+                    
                     "Open with GitHub Desktop": "在 GitHub Desktop 中打開",
                         "Launching GitHub Desktop": "GitHub Desktop 啟動中",
                             "If nothing happens,": "如果沒有響應",
@@ -9568,6 +9629,9 @@ I18N["zh-TW"]["repository"] = { // 儲存庫頁面 /<user-name>/<repo-name>/
         // 程式碼 -> 程式碼空間
         [/(\d+) changes?/, "$1 個更改"],
         [/(.+) has unpushed changes, are you sure you want to delete\?/, "$1 有未提交更改，您確定要刪除嗎？"],
+        // 標星
+        [/Star ([^ ]+)/, "標星 $1"],
+        [/Unstar ([^ ]+)/, "取消標星 $1"],
     ],
     "title": {
         "regexp": [
@@ -9711,6 +9775,8 @@ I18N["zh-TW"]["repository/pull_issue_public"] = { // 儲存庫 - 議題和合併
                 "Repository": "儲存庫",
                 "Organization": "組織",
                 "No projects found. Sorry about that.": "很抱歉，未找到任何專案。",
+                "No projects were found": "未找到專案",
+                    "Please try a different search query.": "請嘗試不同搜尋查詢。",
 
             // "Milestones": "里程碑",
                 "Filter by milestone": "按里程碑篩選",
@@ -10041,6 +10107,16 @@ I18N["zh-TW"]["repository/issues"] = { // 儲存庫 - 議題頁面
             "Filter authors": "篩選作者",
             "Filter by assignees": "篩選受理人",
                 "No assignees": "無人受理",
+
+            // 左側欄
+            "Assigned to me": "分配給您",
+            "Created by me": "由您創建",
+            "Mentioned": "提及",
+            "Recent activity": "最近活動",
+
+            "Collapse sidebar": "摺疊側邊欄",
+            "Expand sidebar": "展開側邊欄",
+
             // 新版內容
                 // 頂部
                     "👋 Want to contribute to": "👋 想做貢獻給",
@@ -10114,6 +10190,7 @@ I18N["zh-TW"]["repository/issues"] = { // 儲存庫 - 議題頁面
                             "Templates and forms": "範本和表單",
                                 // 空白議題
                                     "Create a new issue from scratch": "從頭開始創建新議題",
+                                    "Maintainers only": "僅維護者",
                 "Add existing issue": "新增現有議題",
                     "Search issues": "搜尋議題",
                         "Group selected": "分組選擇",
@@ -10631,6 +10708,10 @@ I18N["zh-TW"]["repository/issues"] = { // 儲存庫 - 議題頁面
             "remaining": "剩餘",
             "items": "項",
             "Load more": "載入更多",
+                // 右側選單
+                "Load more actions": "更多選項",
+                    "Load older activity": "加載更舊活動",
+                    "Load newer activity": "加載更新活動",
 
             "This conversation has been locked and limited to collaborators.": "此對話已鎖定並限制與協作者對話。",
             "This issue has been deleted.": "該議題已被刪除。",
@@ -13597,9 +13678,13 @@ I18N["zh-TW"]["repository/actions"] = { // 儲存庫 - 操作頁面
 
         // 頂部提示
             "Actions Enabled.": "操作已啟用。",
+        "Upcoming change to GitHub App installation token format": "GitHub 應用安裝令牌格式即將變更",
+            "GitHub App installation tokens will soon use a new stateless format (ghs_...) and may be longer (~520 characters). Apps with hardcoded length assumptions may break.": "GitHub 應用安裝令牌即將採用新的無狀態格式（ghs_...），長度可能更長（約 520 個字符）。如果應用硬編碼了長度限制，可能會出錯。",
+            "Validate your apps and workflows with the per-request override header detailed in this": "請使用按請求覆蓋標頭來驗證您的應用和工作流程，詳情請見",
+            "GitHub Changelog": "GitHub 更新日誌",
+            ".": "。",
 
         // 復刻儲存庫操作頁面提示
-            "Workflows aren’t being run on this forked repository": "這個分支儲存庫並未執行任何工作流程。",
             "Workflows aren't being run on this forked repository": "這個分支儲存庫並未執行任何工作流程。",
             "Because this repository contained workflow files when it was forked, we have disabled them from running on this fork. Make sure you understand the configured workflows and their expected usage before enabling Actions on this repository.": "因為這個儲存庫在被分支時含有工作流文件，我們已禁止在此分支上執行它們。在開啟此儲存庫的操作之前，請務必理解配置的工作流程及其預期的使用方式。",
             "Because this repository contained workflow files when it was forked, we have disabled them from running on this fork. Make sure you understand the configured workflows and their expected usage before enabling Actions on this repository. Some GitHub features that depend on Actions may still be able to run.": "因為這個儲存庫在被分支時含有工作流文件，我們已禁止在此分支上執行它們。在開啟此儲存庫的操作之前，請務必理解配置的工作流程及其預期的使用方式。一些依賴於 Actions 的 GitHub 功能可能可以執行。",
@@ -14321,6 +14406,10 @@ I18N["zh-TW"]["repository/new"] = { // 儲存庫 - 新建/編輯/上傳/刪除�
                         "Go to folder": "轉到資料夾",
                         "See all results": "查看所有結果",
 
+            // 文件編碼非 UTF-8
+            "We’ve detected the file encoding as": "檢測到此文件編碼為",
+                ". When you commit changes we will transcode it to": "。提交時將轉碼成",
+
             "Name your file...": "檔名…",
             "in": "在",
 
@@ -14385,7 +14474,8 @@ I18N["zh-TW"]["repository/new"] = { // 儲存庫 - 新建/編輯/上傳/刪除�
 
                     "Create a": "創建",
                     "new branch": "新分支",
-                    "for this commit and start a pull request": "為這個提交，並且發起一個合併請求",
+                    "for this commit": "為這個提交，",
+                    "and start a pull request": "並發起合併請求",
                     "Learn more about pull requests": "瞭解更多關於合併請求的訊息",
 
                 "Something went wrong. Please fork the project, then try from your fork.": "出錯了。請復刻該專案，然後從您的復刻處嘗試。",
@@ -17715,6 +17805,8 @@ I18N["zh-TW"]["repository/settings"] = { // 儲存庫設置 - 通常 /<user-name
             "Unexpected bad things will happen if you don’t read this!": "如果您不閱讀此說明，將會發生意想不到的事情！",
             "All scheduled workflows will stop running.": "所有預定的工作流程將停止執行。",
             "Security features will be unavailable:": "安全功能將無法使用：",
+            "Security features will be interrupted:": "安全功能將停止",
+            "Code scanning will be paused": "程式碼掃描將暫停",
             "Code scanning": "程式碼掃描",
             "Before you archive, please consider:": "在您存檔之前，請考慮：",
             "Updating any repository settings": "更新儲存庫設置",
@@ -20434,6 +20526,7 @@ I18N["zh-TW"]["homepage"] = { // 未登入的首頁
         //"Email address": "電子信箱地址",
         "Enter your email": "輸入信箱地址",
         "Sign up for GitHub": "註冊 GitHub",
+        "Download GitHub Copilot app": "下載 GitHub Copilot 應用",
         //"Start a free enterprise trial": "開始免費試用企業版",
         "Try GitHub Copilot free": "免費試用 GitHub Copilot",
         "Try GitHub Copilot": "試用 GitHub Copilot",
@@ -20536,6 +20629,7 @@ I18N["zh-TW"]["homepage"] = { // 未登入的首頁
             "GitHub scales with teams of any size in any industry.": "GitHub 能適配任何規模、任何行業的團隊。",
 
             // 工業
+            "By industry": "按行業",
                 "Technology": "技術",
                 "Figma streamlines development and strengthens security": "Figma 簡化開發並增強安全性",
                 "Automotive": "汽車",
@@ -20546,6 +20640,7 @@ I18N["zh-TW"]["homepage"] = { // 未登入的首頁
                 "Accenture customizes GitHub Copilot for its 12,000 developers": "埃森哲為其 12,000 名開發者定製 GitHub Copilot",
                 "Philips reduces infrastructure costs by 80%": "飛利浦將基礎設施成本降低 80%",
             // 使用案例
+            "By use case": "按使用場景",
                 "TELUS saves $16.9M with GitHub": "TELUS 使用 GitHub 節省 1690 萬美元",
                 "Automation": "自動化",
                 "Fullstory automates DevSecOps at scale with GitHub": "Fullstory 使用 GitHub 大規模自動化 DevSecOps",
@@ -20559,6 +20654,7 @@ I18N["zh-TW"]["homepage"] = { // 未登入的首頁
         "GitHub internal customer data, 2025.": "GitHub 內部客戶資料，2025年。",
 
         // 底部欄
+        "The developer newsletter": "開發者新聞通訊",
         "Subscribe to our developer newsletter": "訂閱我們的開發者新聞",
         "Get tips, technical guides, and best practices. Twice a month.": "獲取提示、技術指南和最佳實踐。每月兩次。",
         "Get tips, technical guides, and best practices. Twice a month. Right in your inbox.": "獲取提示、技術指南和最佳實踐。每月兩次。直接發送到您的收件箱。",
@@ -20620,7 +20716,7 @@ I18N["zh-TW"]["session-authentication"] = { // 登入頁 包含(/login, /session
             "Password": "密碼",
             "Forgot password?": "忘記密碼？",
             "Sign in": "登入",
-            "Sign in with a passkey": "使用通行金鑰登入",
+            "Continue with passkey": "使用通行金鑰繼續",
             "Signing in…": "登入中…",
 
             "Add an account": "新增帳號", // 新增新帳號
@@ -20727,8 +20823,12 @@ I18N["zh-TW"]["session-authentication"] = { // 登入頁 包含(/login, /session
 
         // https://github.com/sessions/two-factor/webauthn
             "Passkey": "通行金鑰",
-            "When you are ready, authenticate using the button below.": "準備好後，請使用下面的按鈕進行身份驗證。",
+            "Authenticate using your passkey.": "使用您的通行金鑰進行身份驗證。",
             "Use passkey": "使用通行金鑰",
+
+            "2FA recovery code": "雙重身份驗證恢復碼",
+
+            "More options": "更多選項",
 
             "Authentication failed.": "認證失敗。",
             "Retry passkey": "重試通行金鑰",
@@ -21243,12 +21343,19 @@ I18N["zh-TW"]["notifications"] = { // 通知頁面
         "these repositories may be causing unnecessary notifications.": "這些儲存庫可能導致不必要的通知。",
         "unwatch all": "取消所有追蹤",
         "customize": "自定義",
-
+        
+        // 不帶表情為電腦UA，帶表情為手機UA
+        "Assigned": "已分配",
         "🎯 Assigned": "🎯 已分配",
-        "💬 Participating": "💬 參與",
-        "✋ Mentioned": "✋ 提及",
-        "🙌 Team mentioned": "🙌 提到的團隊",
-        "👀 Review requested": "👀 審查請求",
+        "Participating": "參與中",
+        "💬 Participating": "💬 參與中",
+        "Mentioned": "被提及",
+        "✋ Mentioned": "✋ 被提及",
+        "Team mentioned": "團隊被提及",
+        "🙌 Team mentioned": "🙌 團隊被提及",
+        "Review requested": "請求審查",
+        "👀 Review requested": "👀 請求審查",
+        
         "Add new filter": "新增新篩選器",
         "Name": "名稱",
         "Filter by…": "篩選…", // Android UA 下才有
@@ -21495,7 +21602,7 @@ I18N["zh-TW"]["issues"] = { // 議題頁面
 
         "Created": "已創建",
         "Assigned": "已分配",
-        "Mentioned": "提到的",
+        "Mentioning me": "提及我",
             "Issues mentioning you": "提及您的議題",
             "Pull Requests mentioning you": "提及您的合併請求", // pulls
         "Review requests": "審查請求", // pulls
@@ -21504,6 +21611,7 @@ I18N["zh-TW"]["issues"] = { // 議題頁面
         "Views": "視圖",
             "Untitled view": "未命名的視圖",
             "All views": "所有視圖",
+                "No saved views": "沒有已保存的視圖",
             "Create view": "創建視圖",
                 "Build powerful views to keep track of work": "構建強大的視圖來跟蹤工作",
                 "Create your own views to quickly find and access your work.": "創建您自己的視圖以快速查找和訪問您的工作。",
@@ -21824,6 +21932,8 @@ I18N["zh-TW"]["issues"] = { // 議題頁面
         "Clear filter": "清除篩選",
 
         "View issue": "查看議題",
+
+        "Open in GitHub Copilot app": "在 GitHub Copilot 應用中打開",
     },
     "regexp": [ // 正則翻譯
         ...I18N["zh-TW"]["repository/issues"]["regexp"],
@@ -21854,7 +21964,7 @@ I18N["zh-TW"]["issues"] = { // 議題頁面
             // issues
             "Assigned to me": "分配給您",
             "Created by me": "由您創建",
-            "Mentioned": "提到的",
+            "Mentioning me": "提及我",
             "Recent Activity": "最近活動",
             "View": "視圖",
 
@@ -21881,33 +21991,28 @@ I18N["zh-TW"]["pulls"] = { // 合併請求頁面
 
         "Inbox": "收件箱",
             "Needs your review": "需要您的審查",
-                "Expand Needs your review": "展開“需要您的審查”選項卡",
-                "Collapse Needs your review": "摺疊“需要您的審查”選項卡",
                 "Pull requests that need your review will appear here.": "需要您審查的合併請求將出現在這裡。",
             "Needs action": "需要操作",
-                "Expand Needs action": "展開“需要操作”選項卡",
-                "Collapse Needs action": "摺疊“需要操作”選項卡",
                 "Pull requests with failing checks, merge conflicts, or required changes will appear here.": "檢查失敗、存在合併衝突或需要更改的合併請求將出現在這裡。",
             "Ready to merge": "準備合併",
-                "Expand Ready to merge": "展開“準備合併”選項卡",
-                "Collapse Ready to merge": "摺疊“準備合併”選項卡",
                 "Pull requests that are ready to merge will appear here.": "準備合併的合併請求將出現在這裡。",
             "Needs your teams' review": "需要您團隊的審查",
-                "Expand Needs your teams' review": "展開“需要您團隊的審查”選項卡",
-                "Collapse Needs your teams' review": "摺疊“需要您團隊的審查”選項卡",
                 "Pull requests that need your teams' review will appear here.": "需要您團隊審查的合併請求將出現在這裡。",
             "Your drafts": "您的草案",
-                "Expand Your drafts": "展開“您的草案”選項卡",
-                "Collapse Your drafts": "摺疊“您的草案”選項卡",
                 "Pull requests that you have started but not yet submitted for review will appear here.": "您已開始但尚未提交審查的合併請求將出現在這裡。",
             "Waiting for review or checks": "等待審查或檢查",
-                "Expand Waiting for review": "展開“等待審查”選項卡",
-                "Collapse Waiting for review": "摺疊“等待審查”選項卡",
                 "Pull requests that are waiting for review but have not had a review will appear here.": "等待審查但尚未獲得審查的合併請求將出現在這裡。",
             "All caught up": "全部已處理",
+            "About the “Needs your review” section": "關於“需要您的審查”版塊",
+            "About the “Needs your teams' review” section": "關於“需要您團隊的審查”版塊",
+            "About the “Your drafts” section": "關於“您的草案”版塊",
+            "About the “Waiting for review or checks” section": "關於“等待審查或檢查”版塊",
+            "About the “Needs action” section": "關於“需要操作”版塊",
+            "About the “Ready to merge” section": "關於“準備合併”版塊",
             "When a pull request needs your review or attention, it'll appear here.": "當一個合併請求需要您的審查或追蹤時，它將出現在這裡。",
             "Awaiting approval": "等待批准",
             "Customize sections": "自定義版塊", // 右上角設置
+                "Loading customize sections...": "正在加載自定義版塊…",
                 "Move up": "上移",
                 "Move down": "下移",
                 "Hide section": "隱藏版塊",
@@ -21929,6 +22034,9 @@ I18N["zh-TW"]["pulls"] = { // 合併請求頁面
                     "More options for Needs action": "需要操作",
                     "More options for Ready to merge": "準備合併",
                     "More options for Merging": "合併中",
+
+            "Expand": "展開",
+            "Collapse": "摺疊",
 
         "Authored by me": "由我創建",
         "Involves me": "涉及我",
@@ -22007,9 +22115,10 @@ I18N["zh-TW"]["repos"] = {
         "My contributions": "我的貢獻",
         "My repositories": "我的儲存庫",
         "My forks": "我的復刻",
-        "Adminable by me": "我可管理",
+        "Admin access": "擁有管理權限",
 
         "Views": "視圖",
+        "No saved views": "沒有保存的視圖",
             "Create view": "新建",
                 "Icon": "圖示",
                 "Description": "描述",
@@ -22031,6 +22140,7 @@ I18N["zh-TW"]["repos"] = {
             "Descending": "遞減",
 
         "Updated": "更新於",
+        "Collapse sidebar": "摺疊側邊欄",
     },
     "regexp": [
         [/(\d+) repositor(y|ies)/, "$1 個儲存庫"],
@@ -24297,6 +24407,9 @@ I18N["zh-TW"]["orgs"] = { // 組織頁面
         ...I18N["zh-TW"]["orgs-public"]["static"],
         //>>>>>>>>>>>>>>>>>> 組織主頁/概況頁 <<<<<<<<<<<<<<<<<<<<<
             // [/doesn't have any pinned public repositories yet./, "還沒有任何置頂的公共儲存庫。"],
+        "GitHub Copilot billing for": "GitHub Copilot 計費：",
+        "is now usage-based. Set a per-user budget to manage costs.": "現已改為按用量計費。設置每位用戶的預算以管理成本。",
+            "Set your budget": "設置您的預算",
 
             "followers": "追蹤者",
             "Sponsor": "贊助",
@@ -24675,7 +24788,7 @@ I18N["zh-TW"]["orgs/people"] = { // 組織 - 成員標籤卡
             [/Pending Members · People/, "待處理成員"],
             [/Members · People/, "成員"],
             [/Outside Collaborators · People/, "外部協作者 · 成員"],
-            [/Pending Collaborators · People/, "待定協作者 · 成員"], 
+            [/Pending Collaborators · People/, "待定協作者 · 成員"],
             [/Failed Invitations · People/, "失敗邀請 · 成員"],
             [/Security Managers for/, "安全管理員"],
         ],
@@ -28553,7 +28666,16 @@ I18N["zh-TW"]["copilot"] = {
             "Bad response": "點踩",
             "Retry with…": "重試…",
 
+            "View message token usage": "查看此消息詞元消耗",
+                "Message token usage": "此消息詞元消耗",
+                    "Input:": "輸入：",
+                    "Output:": "輸出：",
+                    "tokens": "詞元",
+
             "Scroll to bottom": "滾動至底部",
+
+            "New topic? A fresh chat keeps your usage lower.": "新話題？新聊天有助於降低使用量。",
+                "Start new chat": "開始新聊天",
 
         // 右側
             "Share conversation": "分享對話",
