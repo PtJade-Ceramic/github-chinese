@@ -34,11 +34,16 @@ VS Code 必须带 [COMMAND_LINE_ARGUMENTS](https://learn.microsoft.com/openspecs
 
 #### 方法二：从运行对话框启动
 
-在[运行对话框](https://learn.microsoft.com/windows/advanced-settings/modern-run)中直接带 [COMMAND_LINE_ARGUMENTS] 启动 VS Code：
+在[运行对话框](https://learn.microsoft.com/windows/advanced-settings/modern-run)或 [Command shell](https://learn.microsoft.com/windows-server/administration/windows-commands/windows-commands) 中直接带 [COMMAND_LINE_ARGUMENTS] 启动 VS Code：
 
   ```cmd
   code --enable-proposed-api maboloshi.github-chinese
   ```
+
+你也可以使用：
+
+- [Command shell 中的 `start` 命令](https://learn.microsoft.com/windows-server/administration/windows-commands/start)
+- [PowerShell 中的 `Start-Process` cmdlet](https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.management/start-process)
   
 </details>
 
