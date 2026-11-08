@@ -11,6 +11,7 @@
 // @match        https://skills.github.com/*
 // @match        https://gist.github.com/*
 // @match        https://www.githubstatus.com/*
+// @match        https://cli.github.com/*
 // @require      https://greasyfork.org/scripts/435207-github-%E4%B8%AD%E6%96%87%E5%8C%96%E6%8F%92%E4%BB%B6-%E4%B8%AD%E6%96%87%E8%AF%8D%E5%BA%93%E8%A7%84%E5%88%99/code/GitHub%20%E4%B8%AD%E6%96%87%E5%8C%96%E6%8F%92%E4%BB%B6%20-%20%E4%B8%AD%E6%96%87%E8%AF%8D%E5%BA%93%E8%A7%84%E5%88%99.js?v1.9.2.4-2026-10-14
 // @run-at       document-end
 // @grant        GM_xmlhttpRequest
@@ -541,7 +542,8 @@
         const siteMapping = {
             'gist.github.com': 'gist',
             'www.githubstatus.com': 'status',
-            'skills.github.com': 'skills'
+            'skills.github.com': 'skills',
+            'cli.github.com': 'cli'
         };
         const site = siteMapping[location.hostname] || 'github'; // 站点
         const pathname = location.pathname; // 当前路径
@@ -575,6 +577,8 @@
             page = 'status';
         } else if (site === 'skills') {  // GitHub Skills 页面
             page = 'skills';
+        } else if (site === 'cli') {  // GitHub CLI 页面
+            page = 'cli';
         } else if (pathname === '/' && site === 'github') { // github.com 首页
             page = isLogin ? 'page-dashboard' : 'homepage';
         } else if (isRepository) { // 仓库页
@@ -610,7 +614,24 @@
                 }
             }
         }
-        document.title = str;
+        document.title = str ? applyCliPunctuation(key, str) : str;
+    }
+
+    function applyCliPunctuation(source, text) {
+        if (page !== 'cli') return text;
+        const punctuation = [...source.matchAll(/[.!?,:;→]/g)]
+            .filter(match => !source[match.index + 1] || /\s/.test(source[match.index + 1]));
+        let result = text;
+        for (const match of punctuation) {
+            let index = Math.round(result.length * match.index / Math.max(source.length, 1));
+            while (index < result.length && !/\s/.test(result[index])) index++;
+            result = `${result.slice(0, index).trimEnd()}${match[0] === '→' && match.index > 0 && /\s/.test(source[match.index - 1]) ? ' ' : ''}${{ '.': '。', '!': '！', '?': '？', ',': '，', ':': '：', ';': '；', '→': '→' }[match[0]]}${result.slice(index).trimStart()}`;
+        }
+        return result;
+    }
+
+    function normalizeCliLookupText(text) {
+        return text.replace(/[.!?,:;→]/g, '').replace(/\s+/g, ' ').trim();
     }
 
     /**
@@ -665,7 +686,7 @@
         let str = fetchTranslatedText(_key_neat); // 翻译已知页面 (局部优先)
 
         if (str && str !== _key_neat) { // 已知页面翻译完成
-            return text.replace(_key, str); // 替换原字符，保留首尾空白部分
+            return text.replace(_key, applyCliPunctuation(_key_neat, str)); // 替换原字符，保留首尾空白部分
         }
 
         return false;
@@ -680,6 +701,11 @@
 
         // 静态翻译
         let str = I18N[lang][page]['static'][key] || I18N[lang]['public']['static'][key]; // 默认翻译 公共部分
+        if (!str && page === 'cli') {
+            const normalizedKey = normalizeCliLookupText(key);
+            str = Object.entries(I18N[lang][page]['static'])
+                .find(([source]) => normalizeCliLookupText(source) === normalizedKey)?.[1];
+        }
 
         if (typeof str === 'string') {
             return str;

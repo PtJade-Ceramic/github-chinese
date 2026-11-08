@@ -12,6 +12,7 @@
 // @match        https://gist.github.com/*
 // @match        https://education.github.com/*
 // @match        https://www.githubstatus.com/*
+// @match        https://cli.github.com/*
 // @require      https://mirror.nju.edu.cn/github-chinese/locals.js?v=2026-10-14
 // @run-at       document-start
 // @grant        GM_addStyle
@@ -36,9 +37,10 @@
             'gist.github.com': 'gist',
             'www.githubstatus.com': 'status',
             'skills.github.com': 'skills',
-            'education.github.com': 'education'
+            'education.github.com': 'education',
+            'cli.github.com': 'cli'
         },
-        SPECIAL_SITES: ['gist', 'status', 'skills', 'education'], // 特殊站点类型
+        SPECIAL_SITES: ['gist', 'status', 'skills', 'education', 'cli'], // 特殊站点类型
         DESC_SELECTORS: { // 简介元素的CSS选择器
             repository: ".f4.tmp-my-3",
             gist: ".gist-content [itemprop='about']"
@@ -1151,8 +1153,25 @@
 
         // 应用翻译结果
         if (result) {
-            document.title = result;
+            document.title = applyCliPunctuation(text, result);
         }
+    }
+
+    function applyCliPunctuation(source, text) {
+        if (State.pageConfig?.currentPageType !== 'cli') return text;
+        const punctuation = [...source.matchAll(/[.!?,:;→]/g)]
+            .filter(match => !source[match.index + 1] || /\s/.test(source[match.index + 1]));
+        let result = text;
+        for (const match of punctuation) {
+            let index = Math.round(result.length * match.index / Math.max(source.length, 1));
+            while (index < result.length && !/\s/.test(result[index])) index++;
+            result = `${result.slice(0, index).trimEnd()}${match[0] === '→' && match.index > 0 && /\s/.test(source[match.index - 1]) ? ' ' : ''}${{ '.': '。', '!': '！', '?': '？', ',': '，', ':': '：', ';': '；', '→': '→' }[match[0]]}${result.slice(index).trimStart()}`;
+        }
+        return result;
+    }
+
+    function normalizeCliLookupText(text) {
+        return text.replace(/[.!?,:;→]/g, '').replace(/\s+/g, ' ').trim();
     }
 
     /**
@@ -1230,7 +1249,7 @@
         // 获取翻译
         const result = fetchTransResult(cleanedText);
         if (result && result !== cleanedText) {
-            return text.replace(trimmedText, result);
+            return text.replace(trimmedText, applyCliPunctuation(cleanedText, result));
         }
 
         return false;
@@ -1245,7 +1264,11 @@
         if (!State.pageConfig) return false;
 
         // 静态词典查找
-        const staticResult = State.pageConfig.staticDict[text];
+        const staticResult = State.pageConfig.staticDict[text]
+            || (State.pageConfig.currentPageType === 'cli'
+                ? Object.entries(State.pageConfig.staticDict)
+                    .find(([key]) => normalizeCliLookupText(key) === normalizeCliLookupText(text))?.[1]
+                : undefined);
         if (typeof staticResult === 'string') {
             MissedTermsManager.cleanup(text, State.pageConfig.currentPath);
             return staticResult;

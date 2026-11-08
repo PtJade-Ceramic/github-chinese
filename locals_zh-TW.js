@@ -30019,3 +30019,43 @@ I18N["zh-TW"]["repository/agents"] = {
         "Configure": "自定義配置",
     },
 };
+
+I18N["zh-TW"]["cli"] = { // GitHub CLI 頁面
+    "static": {
+        "PGP signing key rotation for GitHub CLI Linux packages is effective": "GitHub CLI Linux 軟件包的 PGP 簽名金鑰輪換將於",
+        "Find workarounds and fixes for installation and update problems": "查找安裝和更新問題的解決方法及修復方案",
+        "Skip to content": "跳轉到內容",
+        "Copilot CLI": "Copilot CLI",
+        "Manual": "手冊",
+        "Release notes": "發行說明",
+        "Take GitHub to the command line": "將 GitHub 帶到命令列",
+        "GitHub CLI brings GitHub to your terminal Free and open source": "GitHub CLI 將 GitHub 帶到您的終端機 免費且開源",
+        "Install with WinGet": "使用 WinGet 安裝",
+        "Copy install command to clipboard": "複製安裝指令到剪貼簿",
+        "Copy": "複製",
+        "Create a shortcut for a gh command": "為 gh 指令建立捷徑",
+        "View all GitHub CLI commands": "檢視所有 GitHub CLI 指令",
+        "Goodbye context switching Hello terminal": "告別內容切換 擁抱終端機",
+        "Your entire GitHub workflow": "完整的 GitHub 工作流程",
+        "Work with issues pull requests checks releases and more": "處理議題 合併請求 檢查 發行版本等",
+        "Script and customize": "編寫指令碼並自訂",
+        "Call the GitHub API to script almost any action and set a custom alias for any command": "呼叫 GitHub API 為幾乎任何操作編寫指令碼 並為任意指令設定自訂別名",
+        "Learn about aliases and API": "了解別名和 API",
+        "Enterprise-ready": "適用於企業",
+        "Connect to GitHub Enterprise Server in addition to GitHub.com": "除 GitHub.com 外 還可連線到 GitHub Enterprise Server",
+        "Get set up with Enterprise": "設定 Enterprise",
+        "We <3 community": "我們熱愛社群",
+        "GitHub CLI is open source and ready for your contributions": "GitHub CLI 是開源專案 期待您的貢獻",
+        "Contribute to CLI": "為 CLI 做貢獻",
+        "Try GitHub on the command line": "在命令列中試用 GitHub",
+        "View installation instructions": "檢視安裝說明",
+    },
+    "regexp": [
+        [/PGP signing key rotation for GitHub CLI Linux packages is effective (.+?)(?:\.|\s+)Find workarounds and fixes for installation and update problems/, "GitHub CLI Linux 軟件包的 PGP 簽名金鑰輪換將於$1生效 查找安裝和更新問題的解決方法及修復方案"],
+    ],
+    "title": {
+        "static": {
+            "GitHub CLI | Take GitHub to the command line": "GitHub CLI | 將 GitHub 帶到命令列",
+        },
+    },
+};
