@@ -560,36 +560,35 @@
 
         // 优先匹配 body 的 class
         let page, t = document.body.className.match(I18N.conf.rePageClass);
-        if (t) {
-            if (t[1] === 'page-profile') {
-                let matchResult = location.search.match(/tab=(\w+)/);
-                if (matchResult) {
-                    page = 'page-profile/' + matchResult[1];
+        switch (true) {
+            case !!t: {
+                if (t[1] === 'page-profile') {
+                    const matchResult = location.search.match(/tab=(\w+)/);
+                    page = matchResult
+                        ? 'page-profile/' + matchResult[1]
+                        : pathname.match(/\/(stars)/) ? 'page-profile/stars' : 'page-profile';
                 } else {
-                    page = pathname.match(/\/(stars)/) ? 'page-profile/stars' : 'page-profile';
+                    page = t[1];
                 }
-            } else {
-                page = t[1];
+                break;
             }
-        } else if (site === 'gist') { // Gist 站点
-            page = 'gist';
-        } else if (site === 'status') {  // GitHub Status 页面
-            page = 'status';
-        } else if (site === 'skills') {  // GitHub Skills 页面
-            page = 'skills';
-        } else if (site === 'cli') {  // GitHub CLI 页面
-            page = 'cli';
-        } else if (pathname === '/' && site === 'github') { // github.com 首页
-            page = isLogin ? 'page-dashboard' : 'homepage';
-        } else if (isRepository) { // 仓库页
-            t = pathname.match(I18N.conf.rePagePathRepo);
-            page = t ? 'repository/' + t[1] : 'repository';
-        } else if (isOrganization) { // 组织页
-            t = pathname.match(I18N.conf.rePagePathOrg);
-            page = t ? 'orgs/' + (t[1] || t.slice(-1)[0]) : 'orgs';
-        } else {
-            t = pathname.match(I18N.conf.rePagePath);
-            page = t ? (t[1] || t.slice(-1)[0]) : false; // 取页面 key
+            case ['gist', 'status', 'skills', 'cli'].includes(site):
+                page = site;
+                break;
+            case pathname === '/' && site === 'github': // github.com 首页
+                page = isLogin ? 'page-dashboard' : 'homepage';
+                break;
+            case isRepository: // 仓库页
+                t = pathname.match(I18N.conf.rePagePathRepo);
+                page = t ? 'repository/' + t[1] : 'repository';
+                break;
+            case isOrganization: // 组织页
+                t = pathname.match(I18N.conf.rePagePathOrg);
+                page = t ? 'orgs/' + (t[1] || t.slice(-1)[0]) : 'orgs';
+                break;
+            default:
+                t = pathname.match(I18N.conf.rePagePath);
+                page = t ? (t[1] || t.slice(-1)[0]) : false; // 取页面 key
         }
 
         if (!page || !I18N[lang][page]) {
