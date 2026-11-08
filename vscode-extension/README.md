@@ -13,35 +13,31 @@
 
 ## 先决条件
 
-VS Code 必须带 `--enable-proposed-api maboloshi.github-chinese` 参数启动，否则无法使用 browser API。
+VS Code 必须带 [COMMAND_LINE_ARGUMENTS](https://learn.microsoft.com/openspecs/windows_protocols/ms-shllink/17b69472-0f34-4bcf-b290-eccdb8de224b) <a id="command_line_arguments">`--enable-proposed-api maboloshi.github-chinese`</a> 启动，否则无法使用 browser API。
 
 <details>
 <summary>带参数启动 VS Code 的方式</summary>
 
-#### 方法一：修改开始菜单中 VS Code 的快捷方式（一劳永逸）
+#### 方法一：修改开始菜单中 VS Code 的快捷方式（推荐，一劳永逸）
 
 <!-- TODO: 记载用命令行这样做的方法 -->
 
 1. 找到[“开始”菜单]中 VS Code 的快捷方式，在[文件资源管理器](https://support.microsoft.com/windows/experience/fileexplorer/file-explorer-in-windows)中显示。此时焦点通常在
 
-   ```
+   ```cmd
    "%AppData%\Microsoft\Windows\Start Menu\Programs\Visual Studio Code.lnk"
    ```
 
-2. [更改其属性](http://hs.windows.microsoft.com/hhweb/content/m-zh-cn_en-us/p-6.2/id-0acda837-dacc-4a88-bb01-43dc816ad382/)，在 [`目标`](https://learn.microsoft.com/openspecs/windows_protocols/ms-shllink/ac7b5968-68f5-4e5c-8b11-00a6f4ae98ff#gt_3b9c7b80-c157-438a-b53a-dbe935ec3243) 项的值添加 [COMMAND_LINE_ARGUMENTS](https://learn.microsoft.com/openspecs/windows_protocols/ms-shllink/17b69472-0f34-4bcf-b290-eccdb8de224b)：
+2. [更改其属性](http://hs.windows.microsoft.com/hhweb/content/m-zh-cn_en-us/p-6.2/id-0acda837-dacc-4a88-bb01-43dc816ad382/)，在 [`目标`](https://learn.microsoft.com/openspecs/windows_protocols/ms-shllink/ac7b5968-68f5-4e5c-8b11-00a6f4ae98ff#gt_3b9c7b80-c157-438a-b53a-dbe935ec3243) 项的值添加 [COMMAND_LINE_ARGUMENTS]
 
-   ```cmd
-   --enable-proposed-api maboloshi.github-chinese
-   ```
-  
-  然后从[“开始”菜单]启动
+从此以后从[“开始”菜单]启动 VS Code。
 
-#### 方法二：打开运行对话框
+#### 方法二：从运行对话框启动
 
-打开[运行对话框](https://learn.microsoft.com/windows/advanced-settings/modern-run)，输入：
+在[运行对话框](https://learn.microsoft.com/windows/advanced-settings/modern-run)中直接带 [COMMAND_LINE_ARGUMENTS] 启动 VS Code：
 
   ```cmd
-  "%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe" --enable-proposed-api maboloshi.github-chinese
+  code --enable-proposed-api maboloshi.github-chinese
   ```
   
 </details>
@@ -118,4 +114,5 @@ npx @vscode/vsce package # 打包插件
 
 [打开扩展开发宿主窗口](https://code.visualstudio.com/api/get-started/your-first-extension#debugging-the-extension)。
 
+[COMMAND_LINE_ARGUMENTS]: #command_line_arguments
 [“开始”菜单]: https://www.microsoft.com/windows/tips/start-menu
